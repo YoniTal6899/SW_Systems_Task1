@@ -38,7 +38,7 @@ loopd: $(OBJECTS_LOOP_LIB)
 
 ######
 libclassloops.so: $(OBJECTS_LOOP_LIB)
-	$(CC) $(FLAGS) -shared -o libclassloops.so $(OBJECTS_LOOP_LIB)
+	$(CC) $(FLAGS) $(OBJECTS_LOOP_LIB) -shared -o libclassloops.so
 
 libclassrec.so: $(OBJECTS_REC_LIB)
 	$(CC) $(FLAGS) $(OBJECTS_REC_LIB) -shared -o libclassrec.so
