@@ -22,31 +22,38 @@ maindrec: $(OBJECTS_MAIN) libclassrec.so
 
 #Create Static library (loops)
 loops: $(OBJECTS_LOOP_LIB)
-	$(AR) -rcs libclassloops.a $(OBJECTS_LOOP_LIB)
+	#ifndef LIB_LOOPS
+		$(AR) -rcs libclassloops.a $(OBJECTS_LOOP_LIB)
 
 #Create Static library (Rec)
 recursives: $(OBJECTS_REC_LIB)
-	$(AR) -rcs libclassrec.a $(OBJECTS_REC_LIB)
+	#ifndef LIB_recs
+		$(AR) -rcs libclassrec.a $(OBJECTS_REC_LIB)
 
 #Create Dynamic library (Rec)
 recursived: $(OBJECTS_REC_LIB)
-	$(CC) -shared -o libclassrec.so $(OBJECTS_REC_LIB) 
+	#ifndef LIB_recd
+		$(CC) -shared -o libclassrec.so $(OBJECTS_REC_LIB) 
 
 #Create Dynamic library (loops)
 loopd: $(OBJECTS_LOOP_LIB)
-	$(CC) -shared -o libclassloops.so $(OBJECTS_LOOP_LIB)
+	#ifndef LIB_LOOPD
+		$(CC) -shared -o libclassloops.so $(OBJECTS_LOOP_LIB)
 
 ######
 libclassloops.so: $(OBJECTS_LOOP_LIB)
+	#ifndef LIB_LOOPS
+	#define LIB_LOOPS
 	$(CC) $(FLAGS) $(OBJECTS_LOOP_LIB) -shared -o libclassloops.so
 
 libclassrec.so: $(OBJECTS_REC_LIB)
+	#ifndef LIB_recD
+	#define LIB_recD
 	$(CC) $(FLAGS) $(OBJECTS_REC_LIB) -shared -o libclassrec.so
 
-libclassloops.a: $(OBJECTS_LOOP_LIB)
-	$(AR) -rcs libclassloops.a $(OBJECTS_LOOP_LIB)
-
 libclassrec.a: $(OBJECTS_REC_LIB)
+	#ifndef LIB_recs
+	#define LIB_recs
 	$(AR) -rcs libclassrec.a $(OBJECTS_REC_LIB)
 
 basicClassification.o: basicClassification.c
