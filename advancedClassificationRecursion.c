@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <math.h>
 int rev(int a, int tmp);
 int Check_Armstrong (int a, int dignum);
 
@@ -34,8 +33,17 @@ int rev(int a, int tmp)//recursive func-returns reversed number
     return rev(a / 10, tmp);
 }
 
+int power(int base,int power){
+    int res = 1;
+    for (int i = 0; i < power; i++)
+    {
+        res*=base;
+    }
+    return res;
+}
+
 int Check_Armstrong (int a, int dn)//recursive func- returns the sum of the pows
 {
-    if(a>0) return (pow(a%10,dn) +Check_Armstrong(a/10,dn));
+    if(a>0) return (power(a%10,dn) +Check_Armstrong(a/10,dn));
 	return 0;
 }
