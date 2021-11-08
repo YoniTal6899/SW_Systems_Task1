@@ -1,4 +1,4 @@
-FLAG=-Wall
+FLAG=-Wall -g
 CC=gcc
 AR=ar
 
