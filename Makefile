@@ -1,39 +1,46 @@
+FLAG=-Wall
 CC=gcc
 AR=ar
-OBJECTS_MAIN=main.o
-OBJECTS_LOOP_LIB=basicClassification.o advancedClassificationLoop.o
-OBJECTS_REC_LIB=basicClassification.o advancedClassificationRecursion.o
-FLAGS= -Wall -g
-.PHONY: all clean loops loopd recursived recursives mains maindloop maindrec
 
-all: loops mains maindloop maindrec 
-maindrec: $(OBJECTS_MAIN) libclassrec.so
-	$(CC) $(FLAGS) -o maindrec.out $(OBJECTS_MAIN) ./libclassrec.so
-maindloop: $(OBJECTS_MAIN) libclassloops.so 
-	$(CC) $(FLAGS) -o maindloop.out $(OBJECTS_MAIN) ./libclassloops.so
-mains: $(OBJECTS_MAIN) libclassrec.a
-	$(CC) $(FLAGS) -o mains.out $(OBJECTS_MAIN) libclassrec.a 
+all: mains maindloop maindrec libclassloops.a libclassloops.so libclassrec.a libclassrec.so
+loops:libclassloops.a
+loopd:libclassloops.so
+recursives:libclassrec.a
+recursived:libclassrec.so
+	
+mains: main.o libclassrec.a
+	$(CC) $(FLAG) -g -o mains main.o libclassrec.a -lm
+maindloop: main.o libclassloops.so
+	$(CC) $(FLAG) -g -o maindloop main.o ./libclassloops.so -lm
+maindrec: main.o libclassrec.so
+	$(CC) $(FLAG) -g -o maindrec main.o ./libclassrec.so -lm
+	
+libclassloops.a: advancedClassificationLoop.o basicClassification.o
+	$(AR) rcs -o libclassloops.a advancedClassificationLoop.o basicClassification.o
+	
+libclassrec.a: advancedClassificationRecursion.o basicClassification.o
+	$(AR) rcs -o libclassrec.a advancedClassificationRecursion.o basicClassification.o
+	
+libclassrec.so: advancedClassificationRecursion.o basicClassification.o
+	$(CC) -shared advancedClassificationRecursion.o basicClassification.o -o libclassrec.so
 
-loopd: libclassloops.so
-recursived: libclassrec.so
-loops: libclassloops.a
-recursives: libclassrec.a
+libclassloops.so: advancedClassificationLoop.o basicClassification.o
+	$(CC) -shared advancedClassificationLoop.o basicClassification.o -o libclassloops.so
 
-libclassloops.so: $(OBJECTS_LOOP_LIB)
-	$(CC) -shared -o libclassloops.so $(OBJECTS_LOOP_LIB)
-libclassrec.so: $(OBJECTS_REC_LIB)
-	$(CC) -shared -o libclassrec.so $(OBJECTS_REC_LIB)
-libclassrec.a: $(OBJECTS_REC_LIB)
-	$(AR) -rcs libclassrec.a $(OBJECTS_REC_LIB)
-libclassloops.a: $(OBJECTS_LOOP_LIB)
-	$(AR) -rcs libclassloops.a $(OBJECTS_LOOP_LIB)
-advancedClassificationRecursion.o: advancedClassificationRecursion.c NumClass.h
-	$(CC) $(FLAGS) -c advancedClassificationRecursion.c
+advancedClassificationRecursion.o: advancedClassificationRecursion.c NumClass.h 
+	$(CC) $(FLAG) -g -c advancedClassificationRecursion.c
+	
 advancedClassificationLoop.o: advancedClassificationLoop.c NumClass.h
-	$(CC) $(FLAGS) -c advancedClassificationLoop.c
+	$(CC) $(FLAG) -g -c advancedClassificationLoop.c
+
 basicClassification.o: basicClassification.c NumClass.h
-	$(CC) $(FLAGS) -c basicClassification.c 
-main.o : main.c NumClass.h
-	$(CC) $(FLAGS) -c main.c
+	$(CC) $(FLAG) -g -c basicClassification.c 
+
+main.o: NumClass.h main.c
+	$(CC) $(FLAG) -g -c main.c
+
+
+.PHONY: clean all
+
 clean:
-	rm -f *.o *.a *.so *.out
+	rm -f *.o *.a *.so mains maindloop maindrec
