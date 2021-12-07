@@ -2,6 +2,7 @@ FLAG=-Wall -g
 CC=gcc
 AR=ar
 
+
 all: mains maindloop maindrec libclassloops.a libclassloops.so libclassrec.a libclassrec.so
 loops:libclassloops.a
 loopd:libclassloops.so
